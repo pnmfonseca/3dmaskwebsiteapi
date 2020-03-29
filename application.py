@@ -1,15 +1,16 @@
 import config
 import logging
 import json
+from os import environ
 from flask import (
     request
+    , jsonify
  ) #,send_from_directory, render_template, jsonify, make_response
 from config import (
     logger
     , app, db, Result
     ,Tester
 )
-
 
 @app.route('/testinsertone', methods=['POST'])
 def testInsertOne():
@@ -19,7 +20,6 @@ def testInsertOne():
     try:
         
         data = request.get_json()
-
         
         if data.get("message"):
             record = Tester(data.get("message"))
@@ -31,7 +31,7 @@ def testInsertOne():
     except Exception as ex:
         pass
     
-    return Result(data = msg, status = stat).response()
+    return Result(data = msg, status = stat).toJSON()
     
 @app.route('/test', methods=[ 'GET','POST'])
 def test():
@@ -40,13 +40,12 @@ def test():
     stat = Result.SUCCESS
 
     if request.method == "GET":
-        msg ={"{}".format(request.method)}
+        msg ="{}".format(request.method)
         
     if request.method == "POST":
-        msg ={"{}".format(request.method)}
-        stat = Result.FAILURE
-
-    return Result(data = msg, status = stat).response()    
+        msg ="{}".format(request.method)
+        
+    return Result(data = msg, status = stat).toJSON()
 
 @app.route('/createtables', methods=[ 'POST'])
 def resetTables():
@@ -65,9 +64,10 @@ def resetTables():
     return Result(data = msg, status = stat ).toJSON()    
 
 if __name__ == "__main__":
-    useDebug = app.config["APP_ENV"] == "development"
+    app.config["SQLALCHEMY_DATABASE_URI"] = config.getAppConfig("SQLALCHEMY_DATABASE_URI").format(environ.get("MASK_PASSWORD", "root:root"))
+    useDebug = config.getAppConfig("3DMASK_LANDSCAPE") == "sandbox"
     usePort = 5000 if useDebug else None
     config.setupLogger()
-    print("\n" * 2)
-    logging.warning('=== Launching 3DMask Web API ===')
+    print("\n" * 1)
+    logging.warning('=== Launching 3DMask Web API ({}) ==='.format(config.getLandscape()))
     app.run(debug=useDebug, use_reloader=True, port=usePort)
