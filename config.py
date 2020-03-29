@@ -50,7 +50,8 @@ def setupLogger():
 
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s||%(levelname)s||%(filename)s||%(lineno)s||%(funcName)s()||%(message)s",
+        format='''%(asctime)s||%(levelname)s||%(filename)s||%(lineno)s
+                ||%(funcName)s()||%(message)s''',
         datefmt='%m/%d/%Y %I:%M:%S %p',
         handlers=handlers
     )
@@ -118,7 +119,8 @@ class Result():
 
         self.status = kwargs.get("status", "failure")
         self.data = data
-        # self.message = kwargs.get("message", "{} rows".format(self.dataCount()))
+        # self.message = \
+        #       kwargs.get("message", "{} rows".format(self.dataCount()))
 
     def noDataFound(self):
         return len(self.data) == 0
