@@ -37,7 +37,7 @@ The following environment variables should be set:
  Name | Affects
 |---|---
 |MASK_LANDSCAPE| log file name, some config settings
-|MASK_PASSWORD| The database credentials (username:password)
+|MASK_CREDENTIALS| The database credentials (username:password)
 
 If not set, the app behaviour is set to *sandbox*
 
