@@ -4,10 +4,9 @@ import pathlib
 import sys
 import logging
 from flask_sqlalchemy import SQLAlchemy
-from flask import (
-    Flask,
-    make_response
-)
+from functools import wraps
+from flask import Flask, request
+
 print("= config =" * 3)
 
 logger = logging.getLogger(__name__)
@@ -19,6 +18,7 @@ app.config["LOG_FILE_NAME"] = "3dmaskapi-sandbox.log"
 app.config["LOG_FILE_NAME_QA"] = "3dmaskapi-qa.log"
 app.config["LOG_FILE_NAME_PRD"] = "3dmaskapi-prd.log"
 app.config["LOG_FILE_UNIX_PATH"] = "./"
+app.config["AUTH_TOKEN"] = "MASK_TOKEN"
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://{}@localhost/mask"
 app.config["SQLALCHEMY_DATABASE_URI_QA"] = "mysql+pymysql://{}@localhost/mask"
 app.config["SQLALCHEMY_DATABASE_URI_PRD"] = "mysql+pymysql://{}@localhost/mask"
@@ -50,8 +50,8 @@ def setupLogger():
 
     logging.basicConfig(
         level=logging.INFO,
-        format='''%(asctime)s||%(levelname)s||%(filename)s||%(lineno)s
-                ||%(funcName)s()||%(message)s''',
+        format="%(asctime)s||%(levelname)s||%(filename)s||%(lineno)s\
+||%(funcName)s()||%(message)s",
         datefmt='%m/%d/%Y %I:%M:%S %p',
         handlers=handlers
     )
@@ -83,6 +83,26 @@ def getLandscape():
         return _env
     else:
         return "sandbox"
+
+
+def secured():
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            try:
+                if request.headers.get('Authorization') == \
+                        environ.get(getAppConfig("AUTH_TOKEN")):
+                    return f(*args, **kwargs)
+                else:
+                    return Result(status="error", message="Not authorized")\
+                        .toJSON(), 401
+            except Exception as ex:
+                logger.error(str(ex))
+                return Result(status="error", message="Not authorized")\
+                    .toJSON(), 401
+
+        return wrapped
+    return wrapper
 
 
 class Tester(db.Model):
@@ -141,6 +161,3 @@ class Result():
             # "message": self.message,
             "data": _data
         }
-
-    def response(self):
-        return make_response(self.toJSON(), 200)

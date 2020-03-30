@@ -38,6 +38,7 @@ The following environment variables should be set:
 |---|---
 |MASK_LANDSCAPE| log file name, some config settings
 |MASK_CREDENTIALS| The database credentials (username:password)
+|MASK_TOKEN| The token that http requests *must* pass along in headers
 
 If not set, the app behaviour is set to *sandbox*
 

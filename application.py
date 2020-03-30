@@ -5,11 +5,12 @@ from flask import (
     request
  )
 from config import (
-    logger, app, db, Result, Tester
+    logger, app, db, Result, Tester, secured
 )
 
 
 @app.route('/testinsertone', methods=['POST'])
+@secured()
 def testInsertOne():
 
     msg = None
@@ -33,6 +34,7 @@ def testInsertOne():
 
 
 @app.route('/test', methods=['GET', 'POST'])
+@secured()
 def test():
 
     msg = None
@@ -48,6 +50,7 @@ def test():
 
 
 @app.route('/createtables', methods=['POST'])
+@secured()
 def resetTables():
 
     msg = None
