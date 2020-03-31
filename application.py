@@ -5,25 +5,34 @@ from flask import (
     request, jsonify
  )
 from config import (
-    logger, app, db, Result, Tester, secured
+    logger, app, db, Result, secured,
+    Entrega
 )
 
 
-@app.route('/test', methods=['POST'])
+@app.route('/entrega', methods=['GET'])
 @secured()
-def testInsertOne():
+def listEntrega():
+    entregas = Entrega.query.all()
+    entregas = jsonify(entregas)
+    return entregas
+
+
+@app.route('/entrega', methods=['POST'])
+@secured()
+def insert():
 
     msg = {}
     try:
 
-        data = request.get_json()
+        payload = request.get_json()
+        entregas = buildListOfEntregaFromPayload(payload.get("data"))
 
-        if data.get("message"):
-            record = Tester(data.get("message"))
-            db.session.add(record)
-            db.session.commit()
+        for entrega in entregas:
+            print(entrega)
+            db.session.add(entrega)
 
-            return jsonify(record)
+        db.session.commit()
 
     except Exception as ex:
         logger.error(str(ex))
@@ -32,37 +41,29 @@ def testInsertOne():
     return msg
 
 
-@app.route('/test', methods=['GET'])
-@secured()
-def test():
+def buildListOfEntregaFromPayload(pData):
 
-    msg = None
-    stat = Result.SUCCESS
+    listOfEntrega = []
 
-    if request.method == "GET":
-        msg = "{}".format(request.method)
+    try:
 
-    return Result(data="this is a message", status=Result.SUCCESS).toJSON()
-    return Result(data=msg, status=stat).toJSON()
+        for _data in pData:
 
+            _deliveredTo = _data.get("local")
+            _amount = _data.get("qtd")
 
-@app.route('/test/id/<pID>', methods=['GET'])
-@secured()
-def testGetByID(pID):
+            if (_deliveredTo and _amount):
+                listOfEntrega.append(
+                    Entrega(
+                        deliveredTo=_deliveredTo,
+                        amount=_amount
+                    )
+                )
 
-    ret = Tester.query.filter(Tester.id == pID).all()
-    if ret:
-        return jsonify(ret)
-    else:
-        return Result().toJSON()
+    except Exception as ex:
+        logger.error(str(ex))
 
-
-@app.route('/test/all', methods=['GET'])
-@secured()
-def testGetAll():
-    tests = Tester.query.all()
-    tests = jsonify(tests)
-    return tests
+    return listOfEntrega
 
 
 @app.route('/createtables', methods=['POST'])

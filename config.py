@@ -128,7 +128,7 @@ class Entrega(db.Model):
     id: int
     when: datetime = field(default_factory=datetime)
     deliveredTo: str
-    ammount: int
+    amount: int
 
     id = db.Column(db.Integer, primary_key=True)
     when = db.Column(db.DateTime(timezone=True), server_default=func.now())
@@ -138,20 +138,6 @@ class Entrega(db.Model):
     def __init__(self, deliveredTo, amount):
         self.deliveredTo = deliveredTo
         self.amount = amount
-
-
-@dataclass
-class Tester(db.Model):
-    id: int
-    msg: str
-    when: datetime = field(default_factory=datetime)
-
-    id = db.Column(db.Integer, primary_key=True)
-    msg = db.Column(db.String(80), unique=False)
-    when = db.Column(db.DateTime(timezone=True), server_default=func.now())
-
-    def __init__(self, msg):
-        self.msg = msg
 
 
 class Result():

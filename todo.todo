@@ -5,14 +5,14 @@ Notes on TODOs (Todo+ plugin):
 
 
     ☐ Decommission Result
-    ☐ Create Model Entrega
-        ☐ internal ID
-        ☐ timestamp
-        ☐ DeliveredTo
-        ☐ Ammount
+    ✔ Create Model Entrega @done(20-03-31 15:48)
+        ✔ internal ID @done(20-03-31 15:47)
+        ✔ when, timestamp @done(20-03-31 15:48)
+        ✔ DeliveredTo @done(20-03-31 15:48)
+        ✔ Ammount @done(20-03-31 15:48)
     ☐ Interface the following
-        ☐ receive one    
-        ☐ receive+append multiple
+        ✘ receive one @cancelled(20-03-31 16:40)
+        ✔ receive+append multiple @done(20-03-31 20:06)
         ✘ receive+overwrite multiple @cancelled(20-03-31 15:16)
-        ☐ list all
+        ✔ list all @done(20-03-31 20:06)
     
