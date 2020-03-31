@@ -24,7 +24,13 @@ def delete(pID):
     _status = Result.SUCCESS
     try:
 
-        db.session.commit()
+        deletable = Entrega.query.filter(Entrega.id == pID).first()
+        
+        if deletable:
+            db.session.delete(deletable)
+            db.session.commit()
+        else:
+            logger.warning("ID [{}] not found".format(pID))
 
     except Exception as ex:
         logger.warning(str(ex))
