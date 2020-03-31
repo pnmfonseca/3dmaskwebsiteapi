@@ -57,3 +57,28 @@ The application bootstraps:
 
 03/29/2020 03:05:43 AM||WARNING||application.py||72||<module>()||=== Launching 3DMask Web API (sandbox) ===
 ```
+
+### Client calls
+
+Sample calls for this API (Bash environment variable)
+
+```
+export MASK_TOKEN="The-Token-that-the-server-expects"
+
+EXPORT URL="https://your-domain-name"
+```
+
+Create the necessary table(s) if they do not exist
+
+```
+curl  -H "Authorization: $MASK_TOKEN" -X POST $URL/createtables
+```
+
+Send multiple records to the server
+```
+curl -d '{ "data":[{"local": "test1","qtd": "50"},{"local": "test2","qtd": "150"}]}' -H "Content-Type: application/json" -H "Authorization: $MASK_TOKEN" -X POST $URL/entrega
+```
+List all stored records
+```
+curl  -H "Authorization: $MASK_TOKEN" -X GET $URL/entrega
+```

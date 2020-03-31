@@ -143,8 +143,8 @@ class Entrega(db.Model):
 class Result():
     # TODO Deprecate this
 
-    SUCCESS = getAppConfig("STR_SUCCESS")
-    FAILURE = getAppConfig("STR_FAILURE")
+    SUCCESS = app.config["STR_SUCCESS"]
+    FAILURE = app.config["STR_FAILURE"]
     status = ""
     data = []
 

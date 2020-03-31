@@ -10,7 +10,7 @@ Notes on TODOs (Todo+ plugin):
         ✔ when, timestamp @done(20-03-31 15:48)
         ✔ DeliveredTo @done(20-03-31 15:48)
         ✔ Ammount @done(20-03-31 15:48)
-    ☐ Interface the following
+    ✔ Interface the following @done(20-03-31 20:11)
         ✘ receive one @cancelled(20-03-31 16:40)
         ✔ receive+append multiple @done(20-03-31 20:06)
         ✘ receive+overwrite multiple @cancelled(20-03-31 15:16)

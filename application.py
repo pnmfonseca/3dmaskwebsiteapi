@@ -18,27 +18,42 @@ def listEntrega():
     return entregas
 
 
+@app.route('/entrega/id/<pID>', methods=['DELETE'])
+@secured()
+def delete(pID):
+    _status = Result.SUCCESS
+    try:
+
+        db.session.commit()
+
+    except Exception as ex:
+        logger.warning(str(ex))
+        _status = Result.FAILURE
+
+    return Result(status=_status).toJSON()
+
+
 @app.route('/entrega', methods=['POST'])
 @secured()
 def insert():
 
-    msg = {}
+    _status = Result.SUCCESS
     try:
 
         payload = request.get_json()
+        print(payload)
         entregas = buildListOfEntregaFromPayload(payload.get("data"))
 
         for entrega in entregas:
-            print(entrega)
             db.session.add(entrega)
 
         db.session.commit()
 
     except Exception as ex:
-        logger.error(str(ex))
-        pass
+        logger.warning(str(ex))
+        _status = Result.FAILURE
 
-    return msg
+    return Result(status=_status).toJSON()
 
 
 def buildListOfEntregaFromPayload(pData):
