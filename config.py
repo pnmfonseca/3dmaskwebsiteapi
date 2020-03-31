@@ -138,7 +138,7 @@ class Tester(db.Model):
 
 
 class Result():
-# TODO Deprecate this
+    # TODO Deprecate this
 
     SUCCESS = getAppConfig("STR_SUCCESS")
     FAILURE = getAppConfig("STR_FAILURE")

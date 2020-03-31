@@ -37,7 +37,7 @@ def testInsertOne():
 def test():
 
     msg = None
-    stat = Res  ult.SUCCESS
+    stat = Result.SUCCESS
 
     if request.method == "GET":
         msg = "{}".format(request.method)
