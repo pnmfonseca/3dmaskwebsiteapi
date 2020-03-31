@@ -124,6 +124,23 @@ def secured():
 
 
 @dataclass
+class Entrega(db.Model):
+    id: int
+    when: datetime = field(default_factory=datetime)
+    deliveredTo: str
+    ammount: int
+
+    id = db.Column(db.Integer, primary_key=True)
+    when = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    deliveredTo = db.Column(db.String(120), unique=False)
+    amount = db.Column(db.Integer, primary_key=False)
+
+    def __init__(self, deliveredTo, amount):
+        self.deliveredTo = deliveredTo
+        self.amount = amount
+
+
+@dataclass
 class Tester(db.Model):
     id: int
     msg: str
