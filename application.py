@@ -109,7 +109,7 @@ if __name__ == "__main__":
     app.config["SQLALCHEMY_DATABASE_URI"] = \
         config.getAppConfig("SQLALCHEMY_DATABASE_URI")\
         .format(environ.get("MASK_CREDENTIALS", "root:root"))
-    useDebug = config.getAppConfig("3DMASK_LANDSCAPE") == "sandbox"
+    useDebug = config.getLandscape() == "sandbox"
     usePort = 5000 if useDebug else None
     config.setupLogger()
     print("\n" * 2)
