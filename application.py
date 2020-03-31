@@ -2,19 +2,18 @@ import config
 import logging
 from os import environ
 from flask import (
-    request
+    request, jsonify
  )
 from config import (
     logger, app, db, Result, Tester, secured
 )
 
 
-@app.route('/testinsertone', methods=['POST'])
+@app.route('/test', methods=['POST'])
 @secured()
 def testInsertOne():
 
-    msg = None
-    stat = Result.SUCCESS
+    msg = {}
     try:
 
         data = request.get_json()
@@ -24,29 +23,46 @@ def testInsertOne():
             db.session.add(record)
             db.session.commit()
 
-            msg = record.toJSON()
+            return jsonify(record)
 
     except Exception as ex:
         logger.error(str(ex))
         pass
 
-    return Result(data=msg, status=stat).toJSON()
+    return msg
 
 
-@app.route('/test', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET'])
 @secured()
 def test():
 
     msg = None
-    stat = Result.SUCCESS
+    stat = Res  ult.SUCCESS
 
     if request.method == "GET":
         msg = "{}".format(request.method)
 
-    if request.method == "POST":
-        msg = "{}".format(request.method)
-
+    return Result(data="this is a message", status=Result.SUCCESS).toJSON()
     return Result(data=msg, status=stat).toJSON()
+
+
+@app.route('/test/id/<pID>', methods=['GET'])
+@secured()
+def testGetByID(pID):
+
+    ret = Tester.query.filter(Tester.id == pID).all()
+    if ret:
+        return jsonify(ret)
+    else:
+        return Result().toJSON()
+
+
+@app.route('/test/all', methods=['GET'])
+@secured()
+def testGetAll():
+    tests = Tester.query.all()
+    tests = jsonify(tests)
+    return tests
 
 
 @app.route('/createtables', methods=['POST'])

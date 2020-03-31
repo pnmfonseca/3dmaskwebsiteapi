@@ -6,12 +6,31 @@ import logging
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
 from flask import Flask, request
+from dataclasses import dataclass, field
+import datetime
+from flask.json import JSONEncoder
+from sqlalchemy.sql import func
 
 print("= config =" * 3)
 
 logger = logging.getLogger(__name__)
 
+
+class CustomJSONEncoder(JSONEncoder):
+    "Add support for serializing timedeltas"
+
+    def default(self, o):
+        if type(o) == datetime.timedelta:
+            return str(o)
+        elif type(o) == datetime.datetime:
+            return o.isoformat()
+        else:
+            return super().default(o)
+
+
 app = Flask(__name__)
+
+app.json_encoder = CustomJSONEncoder
 
 api_version = '/api/v1'
 app.config["LOG_FILE_NAME"] = "3dmaskapi-sandbox.log"
@@ -50,8 +69,7 @@ def setupLogger():
 
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s||%(levelname)s||%(filename)s|\
-            |%(lineno)s||%(funcName)s()||%(message)s",
+        format="%(asctime)s||%(levelname)s||%(filename)s||%(lineno)s||%(funcName)s()||%(message)s",
         datefmt='%m/%d/%Y %I:%M:%S %p',
         handlers=handlers
     )
@@ -105,29 +123,26 @@ def secured():
     return wrapper
 
 
+@dataclass
 class Tester(db.Model):
+    id: int
+    msg: str
+    when: datetime = field(default_factory=datetime)
+
     id = db.Column(db.Integer, primary_key=True)
     msg = db.Column(db.String(80), unique=False)
+    when = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     def __init__(self, msg):
         self.msg = msg
 
-    def toJSON(self):
-
-        json = {
-            "id": str(self.id),
-            "msg": self.msg
-        }
-
-        return json
-
 
 class Result():
+# TODO Deprecate this
 
-    SUCCESS = "success"
-    FAILURE = "failure"
+    SUCCESS = getAppConfig("STR_SUCCESS")
+    FAILURE = getAppConfig("STR_FAILURE")
     status = ""
-    # message = ""
     data = []
 
     def __init__(self, **kwargs):
@@ -137,10 +152,8 @@ class Result():
         if type(data) != list:
             data = [data]
 
-        self.status = kwargs.get("status", "failure")
+        self.status = kwargs.get("status", self.FAILURE)
         self.data = data
-        # self.message = \
-        #       kwargs.get("message", "{} rows".format(self.dataCount()))
 
     def noDataFound(self):
         return len(self.data) == 0
@@ -158,6 +171,5 @@ class Result():
 
         return {
             "status": self.status,
-            # "message": self.message,
             "data": _data
         }

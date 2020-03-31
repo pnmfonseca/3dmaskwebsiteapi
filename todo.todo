@@ -1,0 +1,18 @@
+Notes on TODOs (Todo+ plugin):
+    Create a checkbox: CMD+Enter | CTRL+Enter
+    Set as Done: OPT+D | ALT+D
+    Set as Cancelled: OPT+C ALT+C
+
+
+    ☐ Decommission Result
+    ☐ Create Model Entrega
+        ☐ internal ID
+        ☐ timestamp
+        ☐ DeliveredTo
+        ☐ Ammount
+    ☐ Interface the following
+        ☐ receive one    
+        ☐ receive+append multiple
+        ✘ receive+overwrite multiple @cancelled(20-03-31 15:16)
+        ☐ list all
+    
