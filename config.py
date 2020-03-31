@@ -50,8 +50,8 @@ def setupLogger():
 
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s||%(levelname)s||%(filename)s||%(lineno)s\
-||%(funcName)s()||%(message)s",
+        format="%(asctime)s||%(levelname)s||%(filename)s|\
+            |%(lineno)s||%(funcName)s()||%(message)s",
         datefmt='%m/%d/%Y %I:%M:%S %p',
         handlers=handlers
     )

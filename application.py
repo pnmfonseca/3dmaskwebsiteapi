@@ -51,7 +51,7 @@ def test():
 
 @app.route('/createtables', methods=['POST'])
 @secured()
-def resetTables():
+def createTables():
 
     msg = None
     stat = None
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     useDebug = config.getAppConfig("3DMASK_LANDSCAPE") == "sandbox"
     usePort = 5000 if useDebug else None
     config.setupLogger()
-    print("\n" * 1)
+    print("\n" * 2)
     logging.warning('=== Launching 3DMask Web API ({}) ==='
                     .format(config.getLandscape()))
     app.run(debug=useDebug, use_reloader=True, port=usePort, host="0.0.0.0")
