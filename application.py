@@ -25,7 +25,7 @@ def delete(pID):
     try:
 
         deletable = Entrega.query.filter(Entrega.id == pID).first()
-        
+
         if deletable:
             db.session.delete(deletable)
             db.session.commit()
@@ -111,7 +111,7 @@ if __name__ == "__main__":
         .format(environ.get("MASK_CREDENTIALS", "root:root"))
 
     print(config.getAppConfig("SQLALCHEMY_DATABASE_URI"))
-    
+
     useDebug = config.getLandscape() == "sandbox"
     usePort = 5000 if useDebug else None
     config.setupLogger()
