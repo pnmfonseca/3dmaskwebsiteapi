@@ -6,7 +6,7 @@ from flask import (
  )
 from config import (
     logger, app, db, Result, secured,
-    Entrega
+    Entrega, Voluntario
 )
 
 
@@ -85,6 +85,81 @@ def buildListOfEntregaFromPayload(pData):
         logger.error(str(ex))
 
     return listOfEntrega
+
+
+def buildListOfVoluntarioFromPayload(pData):
+
+    listOfVoluntario = []
+
+    try:
+
+        for _data in pData:
+
+            _nome = _data.get("nome")
+
+            if (_nome):
+                listOfVoluntario.append(
+                    Voluntario(
+                        nome=_nome
+                    )
+                )
+
+    except Exception as ex:
+        logger.error(str(ex))
+
+    return listOfVoluntario
+
+
+@app.route('/voluntario', methods=['GET'])
+@secured()
+def listVoluntario():
+    voluntarios = Voluntario.query.all()
+    voluntarios = jsonify(voluntarios)
+    return voluntarios
+
+
+@app.route('/voluntario', methods=['POST'])
+@secured()
+def insertVoluntario():
+
+    _status = Result.SUCCESS
+    try:
+
+        payload = request.get_json()
+        print(payload)
+        voluntarios = buildListOfVoluntarioFromPayload(payload.get("data"))
+
+        for voluntario in voluntarios:
+            db.session.add(voluntario)
+
+        db.session.commit()
+
+    except Exception as ex:
+        logger.warning(str(ex))
+        _status = Result.FAILURE
+
+    return Result(status=_status).toJSON()
+
+
+@app.route('/voluntario/id/<pID>', methods=['DELETE'])
+@secured()
+def deleteVoluntario(pID):
+    _status = Result.SUCCESS
+    try:
+
+        deletable = Voluntario.query.filter(Voluntario.id == pID).first()
+
+        if deletable:
+            db.session.delete(deletable)
+            db.session.commit()
+        else:
+            logger.warning("ID [{}] not found".format(pID))
+
+    except Exception as ex:
+        logger.warning(str(ex))
+        _status = Result.FAILURE
+
+    return Result(status=_status).toJSON()
 
 
 @app.route('/createtables', methods=['POST'])

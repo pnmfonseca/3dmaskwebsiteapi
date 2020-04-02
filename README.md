@@ -1,3 +1,14 @@
+## Available API
+
+Object| Action|URL Route|Sample payload
+|---|---|---|---
+Voluntario|list all|{}/voluntario|
+Voluntario|create one of many|{}/voluntario|```{ "data":[{"nome": "ABC"},{"nome": "CDE"}]}```
+Voluntario|delete one|{}/voluntario/id/<ID>
+Entrega|list all|{}/entrega|
+Entrega|create one of many|{}/entrega|```{ "data":[{"local": "test1","qtd": "50"},{"local": "test2","qtd": "150"}]}```
+Entrega|delete one|{}/entrega/id/<ID>
+
 ## Up and running
 > Personal-notes style...not a comprehensive tutorial
 
