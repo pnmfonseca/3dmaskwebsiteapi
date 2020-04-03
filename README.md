@@ -3,10 +3,10 @@
 Object| Action|URL Route|Sample payload
 |---|---|---|---
 Voluntario|list all|{}/voluntario|
-Voluntario|create one of many|{}/voluntario|```{ "data":[{"nome": "ABC"},{"nome": "CDE"}]}```
+Voluntario|create one or many|{}/voluntario|```{ "data":[{"nome": "ABC"},{"nome": "CDE"}]}```
 Voluntario|delete one|{}/voluntario/id/<ID>
 Entrega|list all|{}/entrega|
-Entrega|create one of many|{}/entrega|```{ "data":[{"local": "test1","qtd": "50"},{"local": "test2","qtd": "150"}]}```
+Entrega|create one or many|{}/entrega|```{ "data":[{"local": "test1","qtd": "50"},{"local": "test2","qtd": "150"}]}```
 Entrega|delete one|{}/entrega/id/<ID>
 
 ## Up and running
@@ -23,7 +23,7 @@ Entrega|delete one|{}/entrega/id/<ID>
 
 * Install pyenv
 * * (mac) brew install pyenv-virtualenv
-* * (ubuntu) curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+* * (ubuntu) curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 * Install essentials if not there already
 * * apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev
 * Install Python 3.8.0
