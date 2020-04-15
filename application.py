@@ -1,6 +1,8 @@
 import config
 import logging
 from os import environ
+from faker import Faker
+import random
 from flask import (
     request, jsonify
  )
@@ -110,6 +112,23 @@ def buildListOfVoluntarioFromPayload(pData):
     return listOfVoluntario
 
 
+@app.route('/fake/name', methods=['GET'])
+def getFakeName():
+    fake = Faker()
+    return {'name': fake.name(), 'isActive': random.randint(1, 2) == 1}
+
+
+@app.route('/fake/names', methods=['GET'])
+def getFakeNames():
+    quantos = random.randint(1, 101)
+    logger.info('Generating {} random names...'.format(quantos))
+    _data = []
+    for _ in range(quantos):
+        _data.append(getFakeName())
+
+    return {'total': quantos, 'names': _data}
+
+
 @app.route('/voluntario', methods=['GET'])
 @secured()
 def listVoluntario():
@@ -138,6 +157,14 @@ def insertVoluntario():
         logger.warning(str(ex))
         _status = Result.FAILURE
 
+    return Result(status=_status).toJSON()
+
+
+@app.route('/voluntario/fetch', methods=['POST'])
+@secured()
+def fetchVoluntarios():
+    _status = Result.SUCCESS
+    logger.warning('Fetching Voluntarios from the backoffice')
     return Result(status=_status).toJSON()
 
 

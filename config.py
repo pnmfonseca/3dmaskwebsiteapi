@@ -178,7 +178,6 @@ class Result():
     def toJSON(self):
 
         _data = self.data
-
         if not self.data:
             _data = None
 
