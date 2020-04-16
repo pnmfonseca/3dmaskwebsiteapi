@@ -3,3 +3,4 @@
 __pycache__
 *.log
 helper
+reload.log
