@@ -3,8 +3,10 @@
 Object| Action|URL Route|Sample payload
 |---|---|---|---
 Voluntario|list all|{}/voluntario|
-Voluntario|create one of many|{}/voluntario|```{ "data":[{"nome": "ABC"},{"nome": "CDE"}]}```
+Voluntario|create one of many|{}/voluntario|```{ "data":[{"nome": "ABC", "isActive":true},{"nome": "CDE", "isActive":false}]}```
 Voluntario|delete one|{}/voluntario/id/<ID>
+Voluntario|list Voluntarios from the Backoffice source. Informative only.|{}/voluntario/fetch
+Voluntario|**reload the local store from the Backoffice source**. This would be triggered from a cron job or from an external request|{}/voluntario/reload
 Entrega|list all|{}/entrega|
 Entrega|create one of many|{}/entrega|```{ "data":[{"local": "test1","qtd": "50"},{"local": "test2","qtd": "150"}]}```
 Entrega|delete one|{}/entrega/id/<ID>
