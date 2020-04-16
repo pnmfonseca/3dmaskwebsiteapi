@@ -42,7 +42,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://{}@localhost/mask"
 app.config["SQLALCHEMY_DATABASE_URI_QA"] = "mysql+pymysql://{}@localhost/mask2"
 app.config["SQLALCHEMY_DATABASE_URI_PRD"] = "mysql+pymysql://{}@localhost/mask2"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["BACKOFFICE_VOLUNTARIOS"] = "http://localhost/fake/names"
+app.config["BACKOFFICE_VOLUNTARIOS"] = "http://localhost:5000/fake/names"
 app.config["BACKOFFICE_VOLUNTARIOS_QA"] = "https://"
 app.config["BACKOFFICE_VOLUNTARIOS_PRD"] = "https://"
 
@@ -148,12 +148,15 @@ class Entrega(db.Model):
 class Voluntario(db.Model):
     id: int
     nome: str
+    isActive: bool
 
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(120), unique=False)
+    isActive = db.Column(db.Boolean)
 
-    def __init__(self, nome):
+    def __init__(self, nome, isActive):
         self.nome = nome
+        self.isActive = isActive
 
 
 class Result():

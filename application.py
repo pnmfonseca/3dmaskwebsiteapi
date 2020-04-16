@@ -6,6 +6,7 @@ import random
 from flask import (
     request, jsonify
  )
+import requests
 from config import (
     logger, app, db, Result, secured,
     Entrega, Voluntario
@@ -97,12 +98,14 @@ def buildListOfVoluntarioFromPayload(pData):
 
         for _data in pData:
 
-            _nome = _data.get("nome")
+            _nome = _data.get("name")
+            _isActive = _data.get("isActive")
 
             if (_nome):
                 listOfVoluntario.append(
                     Voluntario(
-                        nome=_nome
+                        nome=_nome,
+                        isActive=_isActive
                     )
                 )
 
@@ -114,25 +117,26 @@ def buildListOfVoluntarioFromPayload(pData):
 
 @app.route('/fake/name', methods=['GET'])
 def getFakeName():
-    fake = Faker()
-    return {'name': fake.name(), 'isActive': random.randint(1, 2) == 1}
+    fake = Faker(['pt_PT'])
+    return {'data': fake.name(), 'isActive': random.randint(1, 2) == 1}
 
 
 @app.route('/fake/names', methods=['GET'])
 def getFakeNames():
     quantos = random.randint(1, 101)
-    logger.info('Generating {} random names...'.format(quantos))
+    logger.info('Generating {} random Portuguese names...'.format(quantos))
     _data = []
+    fake = Faker(['pt_PT'])
     for _ in range(quantos):
-        _data.append(getFakeName())
+        _data.append({'name': fake.name(), 'isActive': random.randint(1, 2) == 1})
 
-    return {'total': quantos, 'names': _data}
+    return {'total': quantos, 'data': _data}
 
 
 @app.route('/voluntario', methods=['GET'])
 @secured()
 def listVoluntario():
-    voluntarios = Voluntario.query.all()
+    voluntarios = Voluntario.query.order_by(Voluntario.nome).all()
     voluntarios = jsonify(voluntarios)
     return voluntarios
 
@@ -160,12 +164,32 @@ def insertVoluntario():
     return Result(status=_status).toJSON()
 
 
-@app.route('/voluntario/fetch', methods=['POST'])
-@secured()
+@app.route('/voluntario/fetch', methods=['GET'])
 def fetchVoluntarios():
-    _status = Result.SUCCESS
-    logger.warning('Fetching Voluntarios from the backoffice')
-    return Result(status=_status).toJSON()
+
+    r = requests.get(config.getAppConfig("BACKOFFICE_VOLUNTARIOS"))
+
+    return(r.json())
+
+
+def clearVoluntario():
+    return Voluntario.query.delete()
+
+
+@app.route('/voluntario/reload', methods=['POST'])
+@secured()
+def reloadVoluntarios():
+
+    # Get Voluntarios from the backoffice
+    voluntarios = buildListOfVoluntarioFromPayload(fetchVoluntarios().get('data'))
+
+    if voluntarios:
+        deleted = clearVoluntario()
+        for voluntario in voluntarios:
+            db.session.add(voluntario)
+        db.session.commit()
+        existent = Voluntario.query.count()
+    return {"deleted": deleted, "created": existent}
 
 
 @app.route('/voluntario/id/<pID>', methods=['DELETE'])
