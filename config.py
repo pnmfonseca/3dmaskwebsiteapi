@@ -42,6 +42,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://{}@localhost/mask"
 app.config["SQLALCHEMY_DATABASE_URI_QA"] = "mysql+pymysql://{}@localhost/mask2"
 app.config["SQLALCHEMY_DATABASE_URI_PRD"] = "mysql+pymysql://{}@localhost/mask2"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["BACKOFFICE_VOLUNTARIOS"] = "http://localhost/fake/names"
+app.config["BACKOFFICE_VOLUNTARIOS_QA"] = "https://"
+app.config["BACKOFFICE_VOLUNTARIOS_PRD"] = "https://"
+
 app.config["STR_SUCCESS"] = "success"
 app.config["STR_FAILURE"] = "failure"
 
