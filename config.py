@@ -45,7 +45,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["BACKOFFICE_VOLUNTARIOS"] = "http://localhost:5000/fake/names"
 app.config["BACKOFFICE_VOLUNTARIOS_QA"] = "http://localhost:5000/fake/names"
 app.config["BACKOFFICE_VOLUNTARIOS_PRD"] = "https://"
-
+app.config["MAX_FAKE_NAMES"] = 500
 app.config["STR_SUCCESS"] = "success"
 app.config["STR_FAILURE"] = "failure"
 

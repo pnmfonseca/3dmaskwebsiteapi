@@ -123,7 +123,7 @@ def getFakeName():
 
 @app.route('/fake/names', methods=['GET'])
 def getFakeNames():
-    quantos = random.randint(1, 101)
+    quantos = random.randint(1, config.getAppConfig('MAX_FAKE_NAMES'))
     logger.info('Generating {} random Portuguese names...'.format(quantos))
     _data = []
     fake = Faker(['pt_PT'])
