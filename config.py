@@ -159,6 +159,51 @@ class Voluntario(db.Model):
         self.isActive = isActive
 
 
+@dataclass
+class Voluntario1(db.Model):
+    id: int
+    nome: str
+    isActive: bool
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(120), unique=False)
+    isActive = db.Column(db.Boolean)
+
+    def __init__(self, nome, isActive):
+        self.nome = nome
+        self.isActive = isActive
+
+
+@dataclass
+class Voluntario2(db.Model):
+    id: int
+    nome: str
+    isActive: bool
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(120), unique=False)
+    isActive = db.Column(db.Boolean)
+
+    def __init__(self, nome, isActive):
+        self.nome = nome
+        self.isActive = isActive
+
+
+@dataclass
+class Voluntario3(db.Model):
+    id: int
+    nome: str
+    isActive: bool
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(120), unique=False)
+    isActive = db.Column(db.Boolean)
+
+    def __init__(self, nome, isActive):
+        self.nome = nome
+        self.isActive = isActive
+
+
 class Result():
     # TODO Deprecate this
 

@@ -9,7 +9,7 @@ from flask import (
 import requests
 from config import (
     logger, app, db, Result, secured,
-    Entrega, Voluntario
+    Entrega, Voluntario, Voluntario1, Voluntario2, Voluntario3
 )
 
 
@@ -173,6 +173,9 @@ def fetchVoluntarios():
 
 
 def clearVoluntario():
+    Voluntario1.query.delete()
+    Voluntario2.query.delete()
+    Voluntario3.query.delete()
     return Voluntario.query.delete()
 
 
