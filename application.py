@@ -7,6 +7,7 @@ from flask import (
     request, jsonify
  )
 import requests
+import math
 from config import (
     logger, app, db, Result, secured,
     Entrega, Voluntario, Voluntario1, Voluntario2, Voluntario3
@@ -192,6 +193,36 @@ def reloadVoluntarios():
             db.session.add(voluntario)
         db.session.commit()
         existent = Voluntario.query.count()
+
+        # Distribute the existing Voluntarios by three tables to make it UI friendly
+        spill = existent % 3
+        dec, fit = math.modf(existent / 3)
+
+        print("fit", fit)
+        print("spill", spill)
+
+        for count, volly in enumerate(Voluntario.query.all(), start=1):
+            if (count <= fit * 1):
+                # print("= VOL 1")
+                # print("\tVolu {}: {}".format(count, volly.nome))
+                db.session.add(Voluntario1(
+                    nome=volly.nome, isActive=volly.isActive
+                ))
+            elif (count > fit and count <= fit * 2):
+                # print("= VOL 2")
+                # print("\tV´olu {}: {}".format(count, volly.nome))
+                db.session.add(Voluntario2(
+                    nome=volly.nome, isActive=volly.isActive
+                ))
+            elif (count > fit and count <= fit * 3 + spill):
+                # print("= VOL 3")
+                # print("\tVolu {}: {}".format(count, volly.nome))
+                db.session.add(Voluntario3(
+                    nome=volly.nome, isActive=volly.isActive
+                ))
+
+        db.session.commit()
+
     return {"deleted": deleted, "created": existent}
 
 
